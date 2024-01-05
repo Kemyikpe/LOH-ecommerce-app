@@ -21,9 +21,9 @@ class ChipItem extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 100),
-        margin: const EdgeInsets.all(10),
-        width: 80,
-        height: 45,
+        margin: const EdgeInsets.all(8),
+        width: 70,
+        height: 40,
         decoration: BoxDecoration(
           color: hasFocus ? Colors.yellow : Colors.white,
           border: Border.all(
