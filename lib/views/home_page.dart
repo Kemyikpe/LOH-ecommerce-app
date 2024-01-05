@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:loh_ecommerce_app/models/list_item.dart';
 
+import '../models/list_items.dart';
 import 'chip_item.dart';
 import 'filter_view.dart';
 
@@ -16,13 +18,6 @@ class _AppHomePageState extends State<AppHomePage>
 
   bool hasFocus = false;
   int current = 0;
-
-  Map<String, List<String>> tabItems = {
-    "All": ["Item 1", "Item 2", "Item 3"],
-    "shoes": ["Shoe 1", "Shoe 2", "Shoe 3"],
-    "Belts": ["Belt 1", "Belt 2", "Belt 3"],
-    "Gloves": ["Glove 1", "Glove 2", "Glove 3"],
-  };
 
   @override
   void initState() {
@@ -122,13 +117,28 @@ class _AppHomePageState extends State<AppHomePage>
 
   Widget _buildTabContent(String tabName) {
 
-    List<String> items = tabItems[tabName] ?? [];
+    List<ListItem> items = tabItems[tabName] ?? [];
 
-    return ListView.builder(
+    return GridView.builder(
+      gridDelegate:
+      const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 8.0,
+        mainAxisSpacing: 4.0,
+      ),
       itemCount: items.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(items[index]),
+        final item = items[index];
+
+        return GridTile(
+          footer: GridTileBar(
+            backgroundColor: Colors.black45,
+            title: Text(item.title),
+          ),
+          child: Image.asset(
+            item.imagePath,
+            fit: BoxFit.cover,
+          ),
         );
       },
     );
