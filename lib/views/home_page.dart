@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../utils/resources/app_images.dart';
 import 'chip_item.dart';
 import 'filter_view.dart';
 
@@ -23,10 +22,6 @@ class _AppHomePageState extends State<AppHomePage>
     "shoes": ["Shoe 1", "Shoe 2", "Shoe 3"],
     "Belts": ["Belt 1", "Belt 2", "Belt 3"],
     "Gloves": ["Glove 1", "Glove 2", "Glove 3"],
-    "Hats": ["Hat 1", "Hat 2", "Hat 3"],
-    "Jewellery": ["Jewelry 1", "Jewelry 2", "Jewelry 3"],
-    "shirts": ["Shirt 1", "Shirt 2", "Shirt 3"],
-    "Trousers": ["Trouser 1", "Trouser 2", "Trouser 3"],
   };
 
   @override
@@ -51,8 +46,6 @@ class _AppHomePageState extends State<AppHomePage>
     _tabController?.dispose();
     super.dispose();
   }
-
-  Icon cusIcon = const Icon(Icons.search);
 
   @override
   Widget build(BuildContext context) {
@@ -116,65 +109,8 @@ class _AppHomePageState extends State<AppHomePage>
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: tabItems.keys.map((item) {
-                  if (item == "shoes") {
-                    return GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 4.0,
-                      ),
-                      itemCount: 20,
-                      itemBuilder: (context, index) {
-                        String imageUrl = AppImage.shoeOne;
-
-                        return GridTile(
-                          footer: const GridTileBar(
-                            backgroundColor: Colors.black45,
-                          ),
-                          child: Image.asset(
-                            imageUrl,
-                            fit: BoxFit.cover,
-                          ),
-                        );
-                      },
-                    );
-                  } else {
-                    return GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 4.0,
-                      ),
-                      itemCount: 20,
-                      itemBuilder: (context, index) {
-                        String itemImageUrl;
-
-                        switch (item) {
-                          case "Belts":
-                            itemImageUrl = AppImage.belt;
-                            break;
-                          case "Gloves":
-                            itemImageUrl = AppImage.gloves;
-                            break;
-                          default:
-                            itemImageUrl = AppImage.shoeTen;
-                        }
-                        return GridTile(
-                          footer: const GridTileBar(
-                            backgroundColor: Colors.black45,
-                            title: Text("Title"),
-                          ),
-                          child: Image.asset(
-                            itemImageUrl,
-                            fit: BoxFit.cover,
-                          ),
-                        );
-                      },
-                    );
-                  }
+                children: tabItems.keys.map((tabName) {
+                  return _buildTabContent(tabName);
                 }).toList(),
               ),
             )
@@ -183,4 +119,19 @@ class _AppHomePageState extends State<AppHomePage>
       ),
     );
   }
+
+  Widget _buildTabContent(String tabName) {
+
+    List<String> items = tabItems[tabName] ?? [];
+
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(items[index]),
+        );
+      },
+    );
+  }
+
 }
