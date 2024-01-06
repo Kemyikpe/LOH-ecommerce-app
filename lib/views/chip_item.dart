@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChipItem extends StatelessWidget {
   const ChipItem(
@@ -25,7 +26,7 @@ class ChipItem extends StatelessWidget {
         width: 70,
         height: 40,
         decoration: BoxDecoration(
-          color: hasFocus ? Colors.yellow : Colors.white,
+          color: hasFocus ? Colors.blue : Colors.white,
           border: Border.all(
             color: current == index ? Colors.blue : Colors.black,
             width: 2,
@@ -35,8 +36,8 @@ class ChipItem extends StatelessWidget {
         child: Center(
           child: Text(
             title,
-            style: TextStyle(
-              color: current == index ? Colors.blue : Colors.black,
+            style: GoogleFonts.poppins(
+              color: current == index ? Colors.white : Colors.black,
             ),
           ),
         ),

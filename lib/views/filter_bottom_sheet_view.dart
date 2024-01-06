@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../enum/filter_criteria.dart';
 import 'filter_item.dart';
 
 class FilterBottomSheet extends StatelessWidget {
@@ -33,12 +35,11 @@ class FilterBottomSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 1.0,),
-          const Text(
-            'Filter by',
-            style: TextStyle(
+          Text(
+            'Filter or Sort by',
+            style: GoogleFonts.poppins(
               color:Colors.black,
               fontSize: 20,
-              fontFamily: 'Circular Std',
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -46,31 +47,31 @@ class FilterBottomSheet extends StatelessWidget {
           FilterItem(
               title: "Popular",
               onTap: (){
-                Navigator.pop(context);
+                Navigator.pop(context, FilterCriteria.popularity);
               }
           ),
           FilterItem(
               title: "Newest",
               onTap: (){
-                Navigator.pop(context);
+                Navigator.pop(context, FilterCriteria.newest);
               }
           ),
           FilterItem(
               title: "Customer review",
               onTap: (){
-                Navigator.pop(context);
+                Navigator.pop(context, FilterCriteria.review);
               }
           ),
           FilterItem(
-              title: "Price lowest to high",
+              title: "Price lowest",
               onTap: (){
-                Navigator.pop(context);
+                Navigator.pop(context, FilterCriteria.lowPrice);
               }
           ),
           FilterItem(
-              title: "Price highest to low",
+              title: "Price highest",
               onTap: (){
-                Navigator.pop(context);
+                Navigator.pop(context, FilterCriteria.highPrice);
               }
           ),
         ],
