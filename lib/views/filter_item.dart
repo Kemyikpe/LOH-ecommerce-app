@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FilterItem extends StatefulWidget {
   const FilterItem({
@@ -15,7 +16,7 @@ class FilterItem extends StatefulWidget {
   final Function() onTap;
 
   @override
-  _FilterItemState createState() => _FilterItemState();
+  State<FilterItem> createState() => _FilterItemState();
 }
 
 class _FilterItemState extends State<FilterItem> {
@@ -42,12 +43,11 @@ class _FilterItemState extends State<FilterItem> {
                 children: [
                   Text(
                     widget.title,
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                       color: isFocused
                           ? widget.focusColor ?? Colors.red
                           : widget.textColor ?? Colors.black,
                       fontSize: 18,
-                      fontFamily: 'Circular Std',
                       fontWeight: FontWeight.w400,
                     ),
                   ),

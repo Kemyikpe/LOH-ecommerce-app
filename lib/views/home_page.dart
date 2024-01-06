@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:loh_ecommerce_app/models/list_item.dart';
+import 'package:loh_ecommerce_app/views/components/search_bar.dart';
+import 'package:loh_ecommerce_app/views/components/tab_chips_view.dart';
+import 'package:loh_ecommerce_app/views/components/tab_content_view.dart';
+import 'package:loh_ecommerce_app/views/view_model/app_view_model.dart';
+import 'package:loh_ecommerce_app/views/view_model/base_view.dart';
+import 'package:provider/provider.dart';
 
 import '../models/list_items.dart';
-import 'chip_item.dart';
-import 'filter_view.dart';
+import 'filter_bottom_sheet_view.dart';
 
 class AppHomePage extends StatefulWidget {
   const AppHomePage({super.key});
@@ -15,8 +19,7 @@ class AppHomePage extends StatefulWidget {
 class _AppHomePageState extends State<AppHomePage>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
-  TextEditingController textController = TextEditingController();
-
+  late ScrollController _scrollController;
 
   bool hasFocus = false;
   int current = 0;
@@ -30,135 +33,139 @@ class _AppHomePageState extends State<AppHomePage>
     _tabController?.animation?.addListener(() {
       if (!mounted) return;
       final int? tabIndex = _tabController?.animation?.value.round();
-      if (tabIndex != current) {
+      if (tabIndex != null && tabIndex != current) {
         setState(() {
-          current = tabIndex!;
+          current = tabIndex;
         });
       }
     });
+
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      // Load more items
+      String currentTab = tabItems.keys.elementAt(current);
+      context.read<AppViewModel>().loadMoreItems(currentTab);
+    }
   }
 
   @override
   void dispose() {
     _tabController?.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Row(
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 50),
-              child: Text("Ecommerce App"),
-            ),
-            const Spacer(),
-            GestureDetector(
-              onTap: () {
-              },
-              child: const Icon(Icons.search),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            const Divider(),
-            GestureDetector(
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const FilterBottomSheet();
-                  },
-                );
-              },
-              child: const Icon(Icons.filter_list),
-            )
-          ],
-        ),
-      ),
-      body: Container(
-        margin: const EdgeInsets.all(10),
-        width: double.infinity,
-        height: double.infinity,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 60,
-              width: double.infinity,
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: tabItems.keys.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (ctx, index) {
-                  return ChipItem(
-                    title: tabItems.keys.elementAt(index),
-                    hasFocus: hasFocus,
-                    current: current,
-                    index: index,
+    return BaseView<AppViewModel>(
+        onModelReady: (model) {},
+        builder: (context, model, child) {
+          String currentTab = tabItems.keys.elementAt(current);
+
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              title: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 50),
+                    child: Text("Ecommerce App"),
+                  ),
+                  const Spacer(),
+                  InkWell(
+                      onTap: () {
+                        model.showSearchField();
+                      },
+                      child: const Icon(Icons.search)),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  const Divider(),
+                  GestureDetector(
                     onTap: () {
-                    setState(() {
-                      current = index;
-                    });
-                    _tabController?.animateTo(index);
-                  },  );
-                },
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const FilterBottomSheet();
+                        },
+                      ).then((selectedFilter) {
+                        if (selectedFilter != null) {
+                          model.applyFilter(
+                              selectedFilter, currentTab, tabItems);
+                        }
+                      });
+                    },
+                    child: const Icon(Icons.filter_list),
+                  )
+                ],
               ),
             ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: tabItems.keys.map((tabName) {
-                  return _buildTabContent(tabName);
-                }).toList(),
+            body: Container(
+              margin: const EdgeInsets.all(10),
+              width: double.infinity,
+              height: double.infinity,
+              child: Column(
+                children: [
+                  AppSearchBar(
+                    searchController: model.searchController,
+                    isVisible: model.isSearch,
+                    onSearchChanged: (value) {
+                      model.searchItems(value, currentTab);
+                    },
+                    onClearQuery: () {
+                      model.clearSearch(currentTab);
+                    },
+                    onCloseSearch: () {
+                      model.closeSearchField(context, currentTab);
+                    },
+                    currentTab: currentTab,
+                  ),
+                  TabChipsView(
+                    tabController: _tabController!,
+                    currentTab: current,
+                    onTabSelected: (index) {
+                      setState(() {
+                        current = index;
+                      });
+                      _tabController?.animateTo(index);
+                    },
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: tabItems.keys.map((tabName) {
+                        return TabContentView(
+                          tabName: tabName,
+                          scrollController: _scrollController,
+                          criteriaSelected: model.criteriaSelected || model.isSearch,
+                          filteredTabItems: model.filteredTabItems,
+                        );
+                      }).toList(),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+            floatingActionButton: Visibility(
+              visible: model.criteriaSelected == true,
+              child: FloatingActionButton(
+                elevation: 8,
+                onPressed: () {
+                  model.clearFilter();
+                },
+                backgroundColor: Colors.blue,
+                child: const Text(
+                  'Clear Filter',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16.0, color: Colors.white),
+                ),
+              ),
+            ),
+          );
+        });
   }
-
-  Widget _buildTabContent(String tabName) {
-
-    List<ListItem> items = tabItems[tabName] ?? [];
-
-    return GridView.builder(
-      gridDelegate:
-      const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 8.0,
-        mainAxisSpacing: 4.0,
-      ),
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-
-        return GridTile(
-          footer: GridTileBar(
-            backgroundColor: Colors.black45,
-            title: Text(item.title),
-          ),
-          child: Image.asset(
-            item.imagePath,
-            fit: BoxFit.cover,
-          ),
-        );
-      },
-    );
-  }
-
 }
-
-
-
-
-
-
-
-
-
-
-
