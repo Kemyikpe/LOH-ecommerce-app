@@ -31,7 +31,6 @@ The  application  allows users to browse through products, and sort products bas
 ### Project Objective
 The primary purpose is to create a user-friendly e-commerce product listing page.
 It is intended to allow users browse through products and sort products based on different criteria.
-It is intended for both patients seeking treatment and healthcare facilities aiming to reach a worldwide audience.
 
 ## PREREQUISITES
 To set up the project, ensure that you have the following installed:
