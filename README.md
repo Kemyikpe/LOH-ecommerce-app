@@ -34,50 +34,56 @@ It is intended to allow users browse through products and sort products based on
 
 ## PREREQUISITES
 To set up the project, ensure that you have the following installed:
- *Flutter SDK
- *Dart SDK
- *Android Studio installed
- *Git
+ * Flutter SDK
+ * Dart SDK
+ * Android Studio installed
+ * Git
 
 ## DEPENDENCIES
 These are the project dependencies added in the pubspec.yaml file. 
- *provider: ^6.1.1
- *get_it: ^7.6.4
- *google_fonts: ^6.1.0
+ * provider: ^6.1.1
+ * get_it: ^7.6.4
+ * google_fonts: ^6.1.0
+
+ ## State Management
+ I used Provider for state management. <br> I added the `provider: ^6.1.1` dependency in the `pubspec.yaml` file, synced the project with `pub get`. then created the `BaseViewModel` and `BaseView` class to handle the state and the `ChangeNotifierProvider` respectfully. The `BaseViewModel` can be extended in any viewmodel class to manage state.
 
 ## PROJECT STRUCTURE
-lib/
-|-- main.dart
-|-- enum/
-|   |-- filter_criteria.dart
-|   |-- view_state.dart
-|-- models/
-|   |-- list_item.dart
-|   |-- list_item.dart
-|-- routes/
-|   |-- locator.dart
-|   |-- routes.dart
-|-- services/
-|   |-- navigation.dart
-|-- utils/
-|   |-- softKey_focus.dart
-|   |-- app_image.dart
-|-- views/components
-|   |-- route_error_page.dart
-|   |-- search_bar.dart
-|   |-- tab_chip_view.dart
-|   |-- tab_content_view.dart
-|   |-- text_field.dart
-|-- view_model/
-|   |-- app_view_model.dart
-|   |-- base_view.dart
-|   |-- base_view_model.dart
-|-- chip_item.dart
-|-- filter_bottom_sheet.dart
-|-- filter_item.dart
-|-- main.dart
+lib/ <br>
+|-- main.dart <br>
+|-- enum/ <br>
+|   |-- filter_criteria.dart <br>
+|   |-- view_state.dart <br>
+|-- models/ <br>
+|   |-- list_item.dart <br>
+|   |-- list_item.dart <br>
+|-- routes/ <br>
+|   |-- locator.dart <br>
+|   |-- routes.dart <br>
+|-- services/ <br>
+|   |-- navigation.dart <br>
+|-- utils/ <br>
+|   |-- softKey_focus.dart <br>
+|   |-- app_image.dart <br>
+|-- views/components <br>
+|   |-- route_error_page.dart <br>
+|   |-- search_bar.dart <br>
+|   |-- tab_chip_view.dart <br>
+|   |-- tab_content_view.dart <br>
+|   |-- text_field.dart <br>
+|-- view_model/ <br>
+|   |-- app_view_model.dart <br>
+|   |-- base_view.dart <br>
+|   |-- base_view_model.dart <br>
+|-- chip_item.dart <br>
+|-- filter_bottom_sheet.dart <br>
+|-- filter_item.dart <br>
+|-- main.dart 
 
 
+## Screen Recording
+
+https://github.com/Kemyikpe/LOH-ecommerce-app/assets/107570182/85246a6d-fba2-459f-9840-0410d4863247
 
 
 
