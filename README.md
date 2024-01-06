@@ -4,25 +4,6 @@ A new Flutter project.
 
 ## Project Setup Documentation
 
-[//]: # (## Table of Contents)
-
-[//]: # (1.Introduction)
-
-[//]: # (1.Get started)
-
-[//]: # (2.Prerequisites)
-
-[//]: # ( *Flutter Installation)
-
-[//]: # ( *IDE Setup)
-
-[//]: # (3.Dependencies)
-
-[//]: # (4.Project Structure)
-
-[//]: # (5.Coding Standards)
-
-[//]: # (6.Running the Application)
 
 ## INTRODUCTION
 This document serves as a guide for setting up and maintaining the Ecommerce App Flutter project. 
@@ -40,6 +21,7 @@ The  application  allows users to browse through products, and sort products bas
    Android Version: 12, <br>
    Device Resolution: 1080 x 2340<br>
    Internal memory: 1.5GB
+
 ## METHODOLOGY
  *IDE (Android Studio)
  *Dart/Flutter: Application programming language and framework.
@@ -51,17 +33,15 @@ The primary purpose is to create a user-friendly e-commerce product listing page
 It is intended to allow users browse through products and sort products based on different criteria.
 It is intended for both patients seeking treatment and healthcare facilities aiming to reach a worldwide audience.
 
-
-
 ## PREREQUISITES
-Before setting up the project, I ensure I have the following installed:
+To set up the project, ensure that you have the following installed:
  *Flutter SDK
  *Dart SDK
  *Android Studio installed
  *Git
 
 ## DEPENDENCIES
-List of all project dependencies in the pubspec.yaml file. 
+These are the project dependencies added in the pubspec.yaml file. 
  *provider: ^6.1.1
  *get_it: ^7.6.4
  *google_fonts: ^6.1.0
@@ -69,20 +49,33 @@ List of all project dependencies in the pubspec.yaml file.
 ## PROJECT STRUCTURE
 lib/
 |-- main.dart
-|-- screens/
-|   |-- home_screen.dart
-|   |-- product_detail_screen.dart
-|-- widgets/
-|   |-- custom_search_delegate.dart
-|   |-- more_options_bottom_sheet.dart
+|-- enum/
+|   |-- filter_criteria.dart
+|   |-- view_state.dart
 |-- models/
-|   |-- product.dart
+|   |-- list_item.dart
+|   |-- list_item.dart
+|-- routes/
+|   |-- locator.dart
+|   |-- routes.dart
 |-- services/
-|   |-- api_service.dart
+|   |-- navigation.dart
 |-- utils/
-|   |-- constants.dart
-|-- theme/
-|   |-- app_theme.dart
+|   |-- softKey_focus.dart
+|   |-- app_image.dart
+|-- views/components
+|   |-- route_error_page.dart
+|   |-- search_bar.dart
+|   |-- tab_chip_view.dart
+|   |-- tab_content_view.dart
+|   |-- text_field.dart
+|-- view_model/
+|   |-- app_view_model.dart
+|   |-- base_view.dart
+|   |-- base_view_model.dart
+|-- chip_item.dart
+|-- filter_bottom_sheet.dart
+|-- filter_item.dart
 |-- main.dart
 
 
