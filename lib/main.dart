@@ -3,12 +3,19 @@ import 'package:loh_ecommerce_app/routes/locator.dart';
 import 'package:loh_ecommerce_app/routes/routes.dart';
 import 'package:loh_ecommerce_app/services/navigation_service.dart';
 import 'package:loh_ecommerce_app/views/home_page.dart';
+import 'package:loh_ecommerce_app/views/view_model/app_view_model.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   ///setup dependency injector
   dependenciesInjectorSetup();
 
-  runApp(const MyApp());
+  runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => AppViewModel())
+        ],
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
