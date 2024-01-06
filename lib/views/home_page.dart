@@ -4,6 +4,7 @@ import 'package:loh_ecommerce_app/views/components/tab_chips_view.dart';
 import 'package:loh_ecommerce_app/views/components/tab_content_view.dart';
 import 'package:loh_ecommerce_app/views/view_model/app_view_model.dart';
 import 'package:loh_ecommerce_app/views/view_model/base_view.dart';
+import 'package:provider/provider.dart';
 
 import '../models/list_items.dart';
 import 'filter_bottom_sheet_view.dart';
@@ -18,6 +19,7 @@ class AppHomePage extends StatefulWidget {
 class _AppHomePageState extends State<AppHomePage>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
+  late ScrollController _scrollController;
 
   bool hasFocus = false;
   int current = 0;
@@ -37,11 +39,23 @@ class _AppHomePageState extends State<AppHomePage>
         });
       }
     });
+
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      // Load more items
+      String currentTab = tabItems.keys.elementAt(current);
+      context.read<AppViewModel>().loadMoreItems(currentTab);
+    }
   }
 
   @override
   void dispose() {
     _tabController?.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -126,6 +140,7 @@ class _AppHomePageState extends State<AppHomePage>
                       children: tabItems.keys.map((tabName) {
                         return TabContentView(
                           tabName: tabName,
+                          scrollController: _scrollController,
                           criteriaSelected: model.criteriaSelected || model.isSearch,
                           filteredTabItems: model.filteredTabItems,
                         );

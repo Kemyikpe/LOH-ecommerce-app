@@ -7,12 +7,14 @@ class TabContentView extends StatelessWidget {
   final String tabName;
   final bool criteriaSelected;
   final Map<String, List<ListItem>> filteredTabItems;
+  final ScrollController scrollController;
 
   const TabContentView({
     Key? key,
     required this.tabName,
     required this.criteriaSelected,
     required this.filteredTabItems,
+    required this.scrollController,
   }) : super(key: key);
 
   @override
@@ -22,6 +24,7 @@ class TabContentView extends StatelessWidget {
         : tabItems[tabName] ?? [];
 
     return GridView.builder(
+      controller: scrollController,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 8.0,
