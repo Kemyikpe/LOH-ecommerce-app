@@ -15,6 +15,10 @@ class AppViewModel extends BaseViewModel {
   final searchController = TextEditingController();
   bool criteriaSelected = false;
   bool isSearch = false;
+  // int currentPage = 1;
+  bool isLoadingMore = false;
+  static const int itemsPerPage = 10;
+  Map<String, int> currentPage = {};
 
   @override
   ViewState get viewState => _state;
@@ -108,6 +112,55 @@ class AppViewModel extends BaseViewModel {
     currentFilterCriteria = null;
     filteredTabItems.clear();
     notifyListeners();
+  }
+
+  void loadMoreItems(String currentTab) {
+    if (isLoadingMore) return;
+
+    isLoadingMore = true;
+    notifyListeners();
+
+    // Example: Fetch more items
+    // Replace this with your actual data fetching logic
+    fetchMoreData(currentTab).then((newItems) {
+      if (newItems.isNotEmpty) {
+        filteredTabItems[currentTab] = [
+          ...?filteredTabItems[currentTab],
+          ...newItems,
+        ];
+      }
+      isLoadingMore = false;
+      notifyListeners();
+    }).catchError((error) {
+      // Handle any errors here
+      isLoadingMore = false;
+      notifyListeners();
+    });
+
+  }
+
+
+  Future<List<ListItem>> fetchMoreData(String currentTab) async {
+    // Simulate network delay
+    await Future.delayed(const Duration(seconds: 2));
+
+    // Initialize current page for the tab if not already set
+    currentPage[currentTab] = currentPage[currentTab] ?? 1;
+
+    // Calculate range of items to fetch
+    int startIndex = (currentPage[currentTab]! - 1) * itemsPerPage;
+    int endIndex = startIndex + itemsPerPage;
+
+    // Fetch items for the current page
+    List<ListItem> allItems = tabItems[currentTab] ?? [];
+    List<ListItem> fetchedItems = allItems.sublist(startIndex, endIndex <= allItems.length ? endIndex : allItems.length);
+
+    // Increment the current page number for next fetch
+    if (endIndex < allItems.length) {
+      currentPage[currentTab] = currentPage[currentTab]! + 1;
+    }
+
+    return fetchedItems;
   }
 
 }
