@@ -15,6 +15,8 @@ class AppHomePage extends StatefulWidget {
 class _AppHomePageState extends State<AppHomePage>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
+  TextEditingController textController = TextEditingController();
+
 
   bool hasFocus = false;
   int current = 0;
@@ -54,7 +56,11 @@ class _AppHomePageState extends State<AppHomePage>
               child: Text("Ecommerce App"),
             ),
             const Spacer(),
-            const Icon(Icons.search),
+            GestureDetector(
+              onTap: () {
+              },
+              child: const Icon(Icons.search),
+            ),
             const SizedBox(
               width: 10,
             ),
@@ -145,3 +151,14 @@ class _AppHomePageState extends State<AppHomePage>
   }
 
 }
+
+
+
+
+
+
+
+
+
+
+
